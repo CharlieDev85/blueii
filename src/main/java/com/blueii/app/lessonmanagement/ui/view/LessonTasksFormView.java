@@ -71,10 +71,10 @@ public class LessonTasksFormView extends VerticalLayout {
             }
         });
 
-        Button saveButton = new Button("Save Lesson");
+        Button addTasktoLesson = new Button("Add Task to Lesson");
         Button backButton = new Button("Back", event -> getUI().ifPresent(ui -> ui.navigate("lessons/new")));
 
-        HorizontalLayout buttonLayout = new HorizontalLayout(backButton, saveButton);
+        HorizontalLayout buttonLayout = new HorizontalLayout(backButton, addTasktoLesson);
         buttonLayout.setWidthFull();
         buttonLayout.setJustifyContentMode(JustifyContentMode.CENTER);
 
