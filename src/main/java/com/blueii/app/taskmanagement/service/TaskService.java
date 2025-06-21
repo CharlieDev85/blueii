@@ -1,7 +1,7 @@
 package com.blueii.app.taskmanagement.service;
 
-import com.blueii.app.taskmanagement.domain.Task;
-import com.blueii.app.taskmanagement.domain.TaskRepository;
+import com.blueii.app.taskmanagement.domain.TaskInit;
+import com.blueii.app.taskmanagement.domain.TaskInitRepository;
 import org.jspecify.annotations.Nullable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -16,12 +16,12 @@ import java.util.List;
 @Transactional(propagation = Propagation.REQUIRES_NEW)
 public class TaskService {
 
-    private final TaskRepository taskRepository;
+    private final TaskInitRepository taskInitRepository;
 
     private final Clock clock;
 
-    TaskService(TaskRepository taskRepository, Clock clock) {
-        this.taskRepository = taskRepository;
+    TaskService(TaskInitRepository taskInitRepository, Clock clock) {
+        this.taskInitRepository = taskInitRepository;
         this.clock = clock;
     }
 
@@ -29,15 +29,15 @@ public class TaskService {
         if ("fail".equals(description)) {
             throw new RuntimeException("This is for testing the error handler");
         }
-        var task = new Task();
+        var task = new TaskInit();
         task.setDescription(description);
         task.setCreationDate(clock.instant());
         task.setDueDate(dueDate);
-        taskRepository.saveAndFlush(task);
+        taskInitRepository.saveAndFlush(task);
     }
 
-    public List<Task> list(Pageable pageable) {
-        return taskRepository.findAllBy(pageable).toList();
+    public List<TaskInit> list(Pageable pageable) {
+        return taskInitRepository.findAllBy(pageable).toList();
     }
 
 }

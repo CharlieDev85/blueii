@@ -1,7 +1,7 @@
 package com.blueii.app.taskmanagement.ui.view;
 
 import com.blueii.app.base.ui.component.ViewToolbar;
-import com.blueii.app.taskmanagement.domain.Task;
+import com.blueii.app.taskmanagement.domain.TaskInit;
 import com.blueii.app.taskmanagement.service.TaskService;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -26,7 +26,7 @@ import static com.vaadin.flow.spring.data.VaadinSpringDataHelpers.toSpringPageRe
 
 @Route("task-list")
 @PageTitle("Task List")
-@Menu(order = 0, icon = "vaadin:clipboard-check", title = "Task List")
+@Menu(order = 0, icon = "vaadin:clipboard-check", title = "Task List here here")
 @PermitAll // When security is enabled, allow all authenticated users
 public class TaskListView extends Main {
 
@@ -35,7 +35,7 @@ public class TaskListView extends Main {
     final TextField description;
     final DatePicker dueDate;
     final Button createBtn;
-    final Grid<Task> taskGrid;
+    final Grid<TaskInit> taskGrid;
 
     public TaskListView(TaskService taskService, Clock clock) {
         this.taskService = taskService;
@@ -43,7 +43,7 @@ public class TaskListView extends Main {
         description = new TextField();
         description.setPlaceholder("What do you want to do?");
         description.setAriaLabel("Task description");
-        description.setMaxLength(Task.DESCRIPTION_MAX_LENGTH);
+        description.setMaxLength(TaskInit.DESCRIPTION_MAX_LENGTH);
         description.setMinWidth("20em");
 
         dueDate = new DatePicker();
@@ -59,17 +59,17 @@ public class TaskListView extends Main {
 
         taskGrid = new Grid<>();
         taskGrid.setItems(query -> taskService.list(toSpringPageRequest(query)).stream());
-        taskGrid.addColumn(Task::getDescription).setHeader("Description");
-        taskGrid.addColumn(task -> Optional.ofNullable(task.getDueDate()).map(dateFormatter::format).orElse("Never"))
+        taskGrid.addColumn(TaskInit::getDescription).setHeader("Description");
+        taskGrid.addColumn(taskInit -> Optional.ofNullable(taskInit.getDueDate()).map(dateFormatter::format).orElse("Never"))
                 .setHeader("Due Date");
-        taskGrid.addColumn(task -> dateTimeFormatter.format(task.getCreationDate())).setHeader("Creation Date");
+        taskGrid.addColumn(taskInit -> dateTimeFormatter.format(taskInit.getCreationDate())).setHeader("Creation Date");
         taskGrid.setSizeFull();
 
         setSizeFull();
         addClassNames(LumoUtility.BoxSizing.BORDER, LumoUtility.Display.FLEX, LumoUtility.FlexDirection.COLUMN,
                 LumoUtility.Padding.MEDIUM, LumoUtility.Gap.SMALL);
 
-        add(new ViewToolbar("Task List", ViewToolbar.group(description, dueDate, createBtn)));
+        add(new ViewToolbar("Task List here", ViewToolbar.group(description, dueDate, createBtn)));
         add(taskGrid);
     }
 
