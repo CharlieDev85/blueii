@@ -43,11 +43,16 @@ public class LessonTasksFormView extends VerticalLayout {
                 //reference selected
                 Div editorContainer = new Div();
                 editorContainer.setId("quill-editor");
-                editorContainer.setWidthFull();
-                editorContainer.setHeight("200px");
+                editorContainer.getStyle().set("minHeight", "300px");
+                editorContainer.getStyle().set("width", "800px");
+                editorContainer.getStyle().set("border", "1px solid #ccc");
+                editorContainer.getStyle().set("borderRadius", "6px");
+                editorContainer.getStyle().set("padding", "8px");
                 taskFormContainer.add(editorContainer);
+
                 UI.getCurrent().getPage().addStyleSheet("https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css");
                 UI.getCurrent().getPage().addJavaScript("https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.min.js");
+
                 UI.getCurrent().getPage().executeJs("""
                     setTimeout(function () {
                         let container = document.querySelector('#quill-editor');
