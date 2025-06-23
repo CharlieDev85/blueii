@@ -1,6 +1,11 @@
 package com.blueii.app.lessonmanagement.service;
 
+import com.blueii.app.lessonmanagement.domain.Reference;
+import com.blueii.app.lessonmanagement.domain.Task;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 
@@ -11,6 +16,8 @@ public class LessonDraftService {
     private String description;
     private byte[] imageData;
     private byte[] pdfData;
+
+    private final List<Task> tasks = new ArrayList<>();
 
     public void reset() {
         this.title = null;
@@ -67,5 +74,16 @@ public class LessonDraftService {
 
     public void setPdfData(byte[] pdfData) {
         this.pdfData = pdfData;
+    }
+    public List<Task> getTasks() {
+        return tasks;
+    }
+    public void setTasks(List<Task> tasks) {
+        this.tasks.clear();
+        this.tasks.addAll(tasks);
+    }
+
+    public void addTask(Reference ref) {
+        tasks.add(ref);
     }
 }
