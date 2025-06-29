@@ -11,7 +11,7 @@ public class Overview {
     private String subtitle;
 
     @ElementCollection
-    private List<String> recommendedLevels;
+    private List<String> tags;
 
     @Lob
     private String description;
@@ -37,12 +37,12 @@ public class Overview {
         this.subtitle = subtitle;
     }
 
-    public List<String> getRecommendedLevels() {
-        return recommendedLevels;
+    public List<String> getTags() {
+        return tags;
     }
 
-    public void setRecommendedLevels(List<String> recommendedLevels) {
-        this.recommendedLevels = recommendedLevels;
+    public void setTags(List<String> recommendedLevels) {
+        this.tags = recommendedLevels;
     }
 
     public String getDescription() {

@@ -1,6 +1,8 @@
 package com.blueii.app.lessonmanagement.ui.view;
 
-import com.blueii.app.lessonmanagement.service.LessonDraftService;
+import com.blueii.app.lessonmanagement.domain.Overview;
+import com.blueii.app.lessonmanagement.service.LessonService;
+import com.blueii.app.lessonmanagement.util.StringUtil;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.H2;
@@ -25,7 +27,10 @@ import java.io.InputStream;
 @Menu(order = 1, icon = "vaadin:clipboard-check", title = "New Lesson")
 @PermitAll // When security is enabled, allow all authenticated users
 public class LessonFormView extends VerticalLayout {
-    public LessonFormView(LessonDraftService lessonDraftService) {
+
+    public LessonFormView(LessonService lessonService) {
+        Overview overview = new Overview();
+
         // View and layout setup
         setSizeFull();
         setAlignItems(Alignment.CENTER);
@@ -37,13 +42,13 @@ public class LessonFormView extends VerticalLayout {
         // Form fields for lesson metadata
         // Load values from draft service if available
         TextField titleField = new TextField("Title");
-        titleField.setValue(lessonDraftService.getTitle() != null ? lessonDraftService.getTitle() : "");
+        titleField.setValue(lessonService.getLesson().getOverview().getTitle() != null ? lessonService.getLesson().getOverview().getTitle() : "");
         TextField subtitleField = new TextField("Subtitle");
-        subtitleField.setValue(lessonDraftService.getSubtitle() != null ? lessonDraftService.getSubtitle() : "");
-        TextArea levelsField = new TextArea("Recommended Levels (comma-separated)");
-        levelsField.setValue(lessonDraftService.getLevels() != null ? lessonDraftService.getLevels() : "");
+        subtitleField.setValue(lessonService.getLesson().getOverview().getSubtitle() != null ? lessonService.getLesson().getOverview().getSubtitle() : "");
+        TextArea tags = new TextArea("tags(comma-separated)");
+        tags.setValue(lessonService.getLesson().getOverview().getTags() != null ? lessonService.getLesson().getOverview().getTags().toString() : "");
         TextArea descriptionField = new TextArea("Description (Plain Text)");
-        descriptionField.setValue(lessonDraftService.getDescription() != null ? lessonDraftService.getDescription() : "");
+        descriptionField.setValue(lessonService.getLesson().getOverview().getDescription() != null ? lessonService.getLesson().getOverview().getDescription()  : "");
         MemoryBuffer imageBuffer = new MemoryBuffer();
         Upload imageUpload = new Upload();
         imageUpload.setReceiver(imageBuffer);
@@ -58,13 +63,13 @@ public class LessonFormView extends VerticalLayout {
 
         titleField.setWidthFull();
         subtitleField.setWidthFull();
-        levelsField.setWidthFull();
+        tags.setWidthFull();
         descriptionField.setWidthFull();
 
-        // Upload listeners to store files in draft service
+        // Upload listeners to store files in the service
         imageUpload.addSucceededListener(event -> {
             try (InputStream is = imageBuffer.getInputStream()) {
-                lessonDraftService.setImageData(is.readAllBytes());
+                lessonService.setImageData(is.readAllBytes());
             } catch (IOException e) {
                 Notification.show("Image upload failed");
             }
@@ -72,7 +77,7 @@ public class LessonFormView extends VerticalLayout {
 
         pdfUpload.addSucceededListener(event -> {
             try (InputStream is = pdfBuffer.getInputStream()) {
-                lessonDraftService.setPdfData(is.readAllBytes());
+                lessonService.setPdfData(is.readAllBytes());
             } catch (IOException e) {
                 Notification.show("PDF upload failed");
             }
@@ -90,7 +95,7 @@ public class LessonFormView extends VerticalLayout {
 
         form.add(titleField);
         form.add(subtitleField);
-        form.add(levelsField);
+        form.add(tags);
         form.add(descriptionField);
         form.add(imageUpload);
         form.add(imageUpload);
@@ -98,10 +103,10 @@ public class LessonFormView extends VerticalLayout {
 
         formWrapper.add(form);
 
-        if (lessonDraftService.getImageData() != null) {
+        if (lessonService.getImageData() != null) {
             Notification.show("Previously uploaded image is already stored.");
         }
-        if (lessonDraftService.getPdfData() != null) {
+        if (lessonService.getPdfData() != null) {
             Notification.show("Previously uploaded PDF is already stored.");
         }
 
@@ -110,10 +115,11 @@ public class LessonFormView extends VerticalLayout {
             if (titleField.isEmpty() || descriptionField.isEmpty()) {
                 Notification.show("Please fill out required fields: Title and Description");
             } else {
-                lessonDraftService.setTitle(titleField.getValue());
-                lessonDraftService.setSubtitle(subtitleField.getValue());
-                lessonDraftService.setLevels(levelsField.getValue());
-                lessonDraftService.setDescription(descriptionField.getValue());
+                overview.setTitle(titleField.getValue());
+                overview.setSubtitle(subtitleField.getValue());
+                overview.setTags(StringUtil.csvToList(tags.getValue()));
+                overview.setDescription(descriptionField.getValue());
+                lessonService.getLesson().setOverview(overview);
                 getUI().ifPresent(ui -> ui.navigate("lessons/new/tasks"));
             }
         });

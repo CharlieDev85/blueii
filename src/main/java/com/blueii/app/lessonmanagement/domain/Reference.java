@@ -9,7 +9,7 @@ import jakarta.persistence.Lob;
 @DiscriminatorValue("REFERENCE")
 public class Reference extends Task {
 
-    private String referenceName;
+    private String taskName;
 
     @Lob
     private String contentHtml;
@@ -22,11 +22,11 @@ public class Reference extends Task {
         this.contentHtml = contentHtml;
     }
 
-    public String getReferenceName() {
-        return referenceName;
+    public String getTaskName() {
+        return taskName;
     }
 
-    public void setReferenceName(String referenceName) {
-        this.referenceName = referenceName;
+    public void setTaskName(String taskName) {
+        this.taskName = taskName;
     }
 }
