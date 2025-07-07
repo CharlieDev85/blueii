@@ -12,7 +12,6 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.textfield.TextField;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,7 +22,7 @@ public class ReferenceTaskForm implements TaskForm{
     private final Div quillEditor = new Div();
 
 
-    ReferenceTaskForm(LessonService lessonService, Grid<String[]> tasksGrid) {
+    ReferenceTaskForm(LessonService lessonService, Grid<Task> tasksGrid) {
         loadQuill();
 
         // Empty at first
@@ -35,14 +34,9 @@ public class ReferenceTaskForm implements TaskForm{
                         reference.setContentHtml(contentHtml);
                         lessonService.addTask(reference);
                         List<Task> allTasks = lessonService.getLesson().getLessonTasks();
-                        List<String[]> taskRows = new ArrayList<>();
-                        for (int i = 0; i < allTasks.size(); i++) {
-                            Task task = allTasks.get(i);
-                            String type = task.getClass().getSimpleName();
-                            String name = task.getTaskName();
-                            taskRows.add(new String[]{String.valueOf(i + 1), type, name});
-                        }
-                        tasksGrid.setItems(taskRows); // Empty at first
+
+                        //todo: fix this for the program to use a Grid<Task> review...
+                        tasksGrid.setItems(allTasks); // Empty at first
                         referenceNameField.clear();
                         UI.getCurrent().getPage().executeJs("document.querySelector('#quill-editor .ql-editor').innerHTML = ''; ");
                     });

@@ -29,7 +29,7 @@ import java.io.InputStream;
 public class LessonFormView extends VerticalLayout {
 
     public LessonFormView(LessonService lessonService) {
-        Overview overview = new Overview();
+        Overview overview = lessonService.getLesson().getOverview() != null ? lessonService.getLesson().getOverview() : new Overview();
 
         // View and layout setup
         setSizeFull();
@@ -42,13 +42,14 @@ public class LessonFormView extends VerticalLayout {
         // Form fields for lesson metadata
         // Load values from draft service if available
         TextField titleField = new TextField("Title");
-        titleField.setValue(lessonService.getLesson().getOverview().getTitle() != null ? lessonService.getLesson().getOverview().getTitle() : "");
+        titleField.setValue(overview.getTitle() != null ? overview.getTitle() : "");
+
         TextField subtitleField = new TextField("Subtitle");
-        subtitleField.setValue(lessonService.getLesson().getOverview().getSubtitle() != null ? lessonService.getLesson().getOverview().getSubtitle() : "");
+        subtitleField.setValue(overview.getSubtitle() != null ? overview.getSubtitle() : "");
         TextArea tags = new TextArea("tags(comma-separated)");
-        tags.setValue(lessonService.getLesson().getOverview().getTags() != null ? lessonService.getLesson().getOverview().getTags().toString() : "");
+        tags.setValue(overview.getTags() != null ? overview.getTags().toString().replace("[", "").replace("]", "") : "");
         TextArea descriptionField = new TextArea("Description (Plain Text)");
-        descriptionField.setValue(lessonService.getLesson().getOverview().getDescription() != null ? lessonService.getLesson().getOverview().getDescription()  : "");
+        descriptionField.setValue(overview.getDescription() != null ? overview.getDescription() : "");
         MemoryBuffer imageBuffer = new MemoryBuffer();
         Upload imageUpload = new Upload();
         imageUpload.setReceiver(imageBuffer);

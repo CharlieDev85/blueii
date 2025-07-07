@@ -6,19 +6,15 @@ import java.util.List;
 @Entity
 @DiscriminatorValue("MULTIPLE_CHOICE")
 public class MultipleChoice extends Task {
-    private String taskName;
+
     private String instructions;
+
+    public MultipleChoice() {
+        super("MULTIPLE_CHOICE");
+    }
 
     @OneToMany(mappedBy = "multipleChoice", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MultipleChoiceQuestion> questions;
-
-    public String getTaskName() {
-        return taskName;
-    }
-
-    public void setTaskName(String taskName) {
-        this.taskName = taskName;
-    }
 
     public String getInstructions() {
         return instructions;

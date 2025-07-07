@@ -10,6 +10,7 @@ import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -31,7 +32,7 @@ public class MultipleChoiceTaskForm implements TaskForm{
     private final List<MultipleChoiceQuestion> questionList = new ArrayList<>();
     private final MultipleChoice multipleChoice = new MultipleChoice();
 
-    public MultipleChoiceTaskForm(LessonService lessonService, Grid<String[]> tasksGrid) {
+    public MultipleChoiceTaskForm(LessonService lessonService, Grid<Task> tasksGrid) {
 
         questionGrid.setWidthFull();
         questionGrid.addColumn(q -> questionList.indexOf(q) + 1).setHeader("Num");
@@ -48,15 +49,8 @@ public class MultipleChoiceTaskForm implements TaskForm{
             multipleChoice.setInstructions(instructionsField.getValue());
             multipleChoice.setQuestions(questionList);
             lessonService.addTask(multipleChoice);
-            List<Task> allTasks = lessonService.getTasks();
-            List<String[]> taskRows = new ArrayList<>();
-            for (int i = 0; i < allTasks.size(); i++) {
-                Task task = allTasks.get(i);
-                String type = task.getClass().getSimpleName();
-                String name = task.getTaskName();
-                taskRows.add(new String[]{String.valueOf(i + 1), type, name});
-            }
-            tasksGrid.setItems(taskRows);
+            List<Task> allTasks = lessonService.getLesson().getLessonTasks();
+            tasksGrid.setItems(allTasks);
         });
 
         displayQuestionForm();
@@ -95,11 +89,17 @@ public class MultipleChoiceTaskForm implements TaskForm{
             questionGrid.setItems(questionList);
             displayQuestionForm();
         });
+        HorizontalLayout option1Layout = new HorizontalLayout(option1, correct1);
+        option1Layout.setAlignItems(FlexComponent.Alignment.BASELINE);
+        HorizontalLayout option2Layout = new HorizontalLayout(option2, correct2);
+        option2Layout.setAlignItems(FlexComponent.Alignment.BASELINE);
+        HorizontalLayout option3Layout = new HorizontalLayout(option3, correct3);
+        option3Layout.setAlignItems(FlexComponent.Alignment.BASELINE);
 
         questionFormLayout.add(questionField,
-                new HorizontalLayout(option1, correct1),
-                new HorizontalLayout(option2, correct2),
-                new HorizontalLayout(option3, correct3),
+                option1Layout,
+                option2Layout,
+                option3Layout,
                 addQuestionButton);
     }
 

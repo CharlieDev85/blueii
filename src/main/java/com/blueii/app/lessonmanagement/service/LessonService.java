@@ -1,6 +1,7 @@
 package com.blueii.app.lessonmanagement.service;
 
 import com.blueii.app.lessonmanagement.domain.Lesson;
+import com.blueii.app.lessonmanagement.domain.Overview;
 import com.blueii.app.lessonmanagement.domain.Task;
 import com.blueii.app.lessonmanagement.repository.LessonRepository;
 import org.springframework.stereotype.Service;
@@ -16,7 +17,9 @@ public class LessonService {
 
     public LessonService(LessonRepository lessonRepository) {
         this.lessonRepository = lessonRepository;
+        Overview overview = new Overview();
         List<Task> tasks = new ArrayList<>();
+        lesson.setOverview(overview);
         lesson.setLessonTasks(tasks);
     }
 
