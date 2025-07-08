@@ -30,6 +30,7 @@ public class ReferenceTaskForm implements TaskForm{
             UI.getCurrent().getPage().executeJs("return document.querySelector('#quill-editor .ql-editor').innerHTML;")
                     .then(String.class, contentHtml -> {
                         Reference reference = new Reference();
+                        reference.setLesson(lessonService.getLesson());
                         reference.setTaskName(referenceNameField.getValue());
                         reference.setContentHtml(contentHtml);
                         lessonService.addTask(reference);

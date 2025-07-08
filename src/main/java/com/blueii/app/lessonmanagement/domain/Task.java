@@ -3,18 +3,17 @@ package com.blueii.app.lessonmanagement.domain;
 import jakarta.persistence.*;
 
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "task_type")
 public abstract class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "task_id")
     private Long id;
-    private String type;
+
     protected  String taskName;
 
-    public Task(String type) {
-        this.type = type;
-    }
+
 
     public Task() {}
 
@@ -39,13 +38,6 @@ public abstract class Task {
         this.id = id;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
 
     public Lesson getLesson() {
         return lesson;
@@ -53,5 +45,9 @@ public abstract class Task {
 
     public void setLesson(Lesson lesson) {
         this.lesson = lesson;
+    }
+
+    public String getDiscriminatorType() {
+        return this.getClass().getSimpleName(); // or custom logic
     }
 }

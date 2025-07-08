@@ -2,10 +2,11 @@ package com.blueii.app.lessonmanagement.domain;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
-public class MultipleChoiceQuestion {
+public class MultipleChoiceQuestion implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -13,12 +14,13 @@ public class MultipleChoiceQuestion {
     private String question;
 
     @ElementCollection
+    @CollectionTable(name = "question_options")
     private List<String> options;
 
     private String correctAnswer;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "multiple_choice_id")
+    @JoinColumn(name = "task_id")
     private MultipleChoice multipleChoice;
 
     public Long getId() {

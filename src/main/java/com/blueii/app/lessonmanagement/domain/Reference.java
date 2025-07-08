@@ -1,20 +1,18 @@
 package com.blueii.app.lessonmanagement.domain;
 
 
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Lob;
+import jakarta.persistence.*;
 
 @Entity
-@DiscriminatorValue("REFERENCE")
+@DiscriminatorValue("Reference")
 public class Reference extends Task {
+
+
 
     @Lob
     private String contentHtml;
 
-    public Reference(){
-        super("REFERENCE");
-    }
+
 
     public String getContentHtml() {
         return contentHtml;
@@ -22,6 +20,11 @@ public class Reference extends Task {
 
     public void setContentHtml(String contentHtml) {
         this.contentHtml = contentHtml;
+    }
+
+    @Override
+    public String getDiscriminatorType() {
+        return "Reference";
     }
 
 

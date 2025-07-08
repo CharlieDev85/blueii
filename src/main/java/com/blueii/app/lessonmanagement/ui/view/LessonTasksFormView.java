@@ -44,7 +44,7 @@ public class LessonTasksFormView extends VerticalLayout {
         List<Task> tasks = lessonService.getLesson().getLessonTasks();
         tasksGrid.setItems(tasks);
         tasksGrid.addColumn(Task::getId).setHeader("Id");
-        tasksGrid.addColumn(Task::getType).setHeader("Task Type");
+        tasksGrid.addColumn(Task::getDiscriminatorType).setHeader("Task Type");
         tasksGrid.addColumn(Task::getTaskName).setHeader("Task Name").setAutoWidth(true);
         tasksGrid.addComponentColumn(item -> new Button("Edit")).setHeader("Edit").setAutoWidth(true);
         tasksGrid.addComponentColumn(item -> new Button("Delete")).setHeader("Delete").setAutoWidth(true);
@@ -56,7 +56,10 @@ public class LessonTasksFormView extends VerticalLayout {
 
 
         Button backButton = new Button("Back", event -> getUI().ifPresent(ui -> ui.navigate("lessons/new")));
-        Button saveLessonButton = new Button("Save Lesson", event -> {  });
+        Button saveLessonButton = new Button("Save Lesson", event -> {
+            lessonService.saveLesson();
+            getUI().ifPresent(ui -> ui.navigate("lessons/new"));
+        });
         HorizontalLayout horizontalLayout = new HorizontalLayout(backButton, saveLessonButton);
         horizontalLayout.setWidthFull();
         horizontalLayout.setJustifyContentMode(JustifyContentMode.CENTER);

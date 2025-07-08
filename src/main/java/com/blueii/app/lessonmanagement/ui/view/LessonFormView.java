@@ -118,7 +118,7 @@ public class LessonFormView extends VerticalLayout {
             } else {
                 overview.setTitle(titleField.getValue());
                 overview.setSubtitle(subtitleField.getValue());
-                overview.setTags(StringUtil.csvToList(tags.getValue()));
+                overview.setTags(StringUtil.csvToSet(tags.getValue()));
                 overview.setDescription(descriptionField.getValue());
                 lessonService.getLesson().setOverview(overview);
                 getUI().ifPresent(ui -> ui.navigate("lessons/new/tasks"));

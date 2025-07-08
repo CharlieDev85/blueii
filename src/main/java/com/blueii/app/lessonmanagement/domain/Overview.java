@@ -2,7 +2,7 @@ package com.blueii.app.lessonmanagement.domain;
 
 import jakarta.persistence.*;
 
-import java.util.List;
+import java.util.Set;
 
 @Embeddable
 public class Overview {
@@ -11,7 +11,9 @@ public class Overview {
     private String subtitle;
 
     @ElementCollection
-    private List<String> tags;
+    @CollectionTable(name = "lesson_tags", joinColumns = @JoinColumn(name = "lesson_id"))
+    @Column(name = "tag")
+    private Set<String> tags;
 
     @Lob
     private String description;
@@ -37,12 +39,12 @@ public class Overview {
         this.subtitle = subtitle;
     }
 
-    public List<String> getTags() {
+    public Set<String> getTags() {
         return tags;
     }
 
-    public void setTags(List<String> recommendedLevels) {
-        this.tags = recommendedLevels;
+    public void setTags(Set<String> tags) {
+        this.tags = tags;
     }
 
     public String getDescription() {

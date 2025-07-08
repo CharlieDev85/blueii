@@ -4,14 +4,11 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@DiscriminatorValue("MULTIPLE_CHOICE")
+@DiscriminatorValue("Multiple Choice")
 public class MultipleChoice extends Task {
 
     private String instructions;
 
-    public MultipleChoice() {
-        super("MULTIPLE_CHOICE");
-    }
 
     @OneToMany(mappedBy = "multipleChoice", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MultipleChoiceQuestion> questions;
@@ -30,5 +27,15 @@ public class MultipleChoice extends Task {
 
     public void setQuestions(List<MultipleChoiceQuestion> questions) {
         this.questions = questions;
+    }
+
+    @Override
+    public String getDiscriminatorType() {
+        return "Multiple Choice";
+    }
+
+    public void addQuestion(MultipleChoiceQuestion question) {
+        question.setMultipleChoice(this);
+        this.questions.add(question);
     }
 }

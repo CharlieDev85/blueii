@@ -45,6 +45,7 @@ public class MultipleChoiceTaskForm implements TaskForm{
         })).setHeader("Delete");
 
         saveMultipleChoiceButton.addClickListener(e -> {
+            multipleChoice.setLesson(lessonService.getLesson());
             multipleChoice.setTaskName(taskNameField.getValue());
             multipleChoice.setInstructions(instructionsField.getValue());
             multipleChoice.setQuestions(questionList);
@@ -85,6 +86,7 @@ public class MultipleChoiceTaskForm implements TaskForm{
             question.setQuestion(questionField.getValue());
             question.setOptions(options);
             question.setCorrectAnswer(correct);
+            question.setMultipleChoice(multipleChoice);
             questionList.add(question);
             questionGrid.setItems(questionList);
             displayQuestionForm();
