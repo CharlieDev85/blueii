@@ -9,6 +9,7 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.menubar.MenuBar;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
@@ -57,8 +58,13 @@ public class LessonTasksFormView extends VerticalLayout {
 
         Button backButton = new Button("Back", event -> getUI().ifPresent(ui -> ui.navigate("lessons/new")));
         Button saveLessonButton = new Button("Save Lesson", event -> {
-            lessonService.saveLesson();
-            getUI().ifPresent(ui -> ui.navigate("lessons/new"));
+            try {
+                lessonService.saveLesson();
+                Notification.show("Lesson saved");
+                getUI().ifPresent(ui -> ui.navigate("lessons/new"));
+            } catch (Exception e) {
+                Notification.show("Error: " + e.getMessage(), 3000, Notification.Position.MIDDLE);
+            }
         });
         HorizontalLayout horizontalLayout = new HorizontalLayout(backButton, saveLessonButton);
         horizontalLayout.setWidthFull();
