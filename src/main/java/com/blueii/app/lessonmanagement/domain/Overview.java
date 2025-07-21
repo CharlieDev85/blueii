@@ -10,7 +10,7 @@ public class Overview {
     private String title;
     private String subtitle;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "lesson_tags", joinColumns = @JoinColumn(name = "lesson_id"))
     @Column(name = "tag")
     private Set<String> tags;

@@ -31,21 +31,35 @@ public class LessonService {
     }
 
     public void saveLesson() throws IOException {
+        // Save lesson first to ensure it has an ID
         lessonRepository.save(lesson);
-        if(this.getImageData() != null && this.getPdfData() != null){
-            Path imagePath = Path.of("uploads", "lesson-" + lesson.getId() + "-image.png");
-            Path pdfPath = Path.of("uploads", "lesson-" + lesson.getId() + "-file.pdf");
-            // Create 'uploads/' folder if it doesn't exist
-            Files.createDirectories(imagePath.getParent());
-            // Write files
+
+        // If no file uploaded, skip file logic
+        if (this.getImageData() == null && this.getPdfData() == null) return;
+
+        Path uploadDir = Path.of("uploads");
+        Files.createDirectories(uploadDir); // Ensure folder exists
+
+        // Build file names using lesson ID
+        String baseName = "lesson-" + lesson.getId();
+        Path imagePath = uploadDir.resolve(baseName + "-image.webp");
+        Path pdfPath = uploadDir.resolve(baseName + "-file.pdf");
+
+        // Write files
+        if (this.getImageData() != null) {
             Files.write(imagePath, this.getImageData());
-            Files.write(pdfPath, this.getPdfData());
-            // Set accessible URLs
-            lesson.getOverview().setImageUrl("/uploads/lesson-" + lesson.getId() + "-image.png");
-            lesson.getOverview().setPdfUrl("/uploads/lesson-" + lesson.getId() + "-file.pdf");
-            lessonRepository.save(lesson);
+            lesson.getOverview().setImageUrl("/uploads/" + imagePath.getFileName());
         }
+
+        if (this.getPdfData() != null) {
+            Files.write(pdfPath, this.getPdfData());
+            lesson.getOverview().setPdfUrl("/uploads/" + pdfPath.getFileName());
+        }
+
+        // Save again with updated overview
+        lessonRepository.save(lesson);
     }
+
 
 
     private byte[] imageData;
@@ -88,5 +102,13 @@ public class LessonService {
         lesson.setOverview(new Overview());
         lesson.setLessonTasks(new ArrayList<>());
         lesson.setLessonTasks(tasks);
+    }
+    public List<Lesson> getAllLessons() {
+        return lessonRepository.findAll();
+    }
+
+    public Lesson getLessonById(Long id) {
+        lesson = lessonRepository.findById(id).orElse(null);
+        return lesson;
     }
 }

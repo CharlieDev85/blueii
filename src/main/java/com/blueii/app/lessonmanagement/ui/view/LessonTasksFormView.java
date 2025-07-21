@@ -60,6 +60,7 @@ public class LessonTasksFormView extends VerticalLayout {
         Button saveLessonButton = new Button("Save Lesson", event -> {
             try {
                 lessonService.saveLesson();
+                lessonService.clean();
                 Notification.show("Lesson saved");
                 getUI().ifPresent(ui -> ui.navigate("lessons/new"));
             } catch (Exception e) {
